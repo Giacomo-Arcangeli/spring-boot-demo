@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort; // Importa la classe Sort corretta
 
-
 @Controller
 public class MessageController {
     @Autowired
@@ -23,18 +22,18 @@ public class MessageController {
     @Autowired
     private UserRepository userRepository;
 
-
     @GetMapping("/messages")
-    public String viewMessages(Model model, 
-                               @RequestParam(defaultValue = "0") int page, 
-                               @RequestParam(defaultValue = "10") int size) {
-        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public String viewMessages(Model model,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
         String currentUsername = authentication.getName();
-        
+
         // Crea l'oggetto Pageable con ordinamento discendente basato sul timestamp
         Pageable pageable = PageRequest.of(page, size, Sort.by("timestamp").descending());
         Page<Message> messagePage = messageService.findAllRelevantMessages(currentUsername, pageable);
-        
+
         model.addAttribute("messagePage", messagePage);
         model.addAttribute("users", userRepository.findAll());
         return "messages";
@@ -53,14 +52,16 @@ public class MessageController {
     }
 
     @PostMapping("/messages/send")
-    public String sendMessage(@ModelAttribute("message") Message message, 
-                              @RequestParam(required = false) String receiverUsername, 
-                              @RequestParam(defaultValue = "false") boolean sendPrivate) {
-        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public String sendMessage(@ModelAttribute("message") Message message,
+            @RequestParam(required = false) String receiverUsername,
+            @RequestParam(defaultValue = "false") boolean sendPrivate) {
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
         String username = authentication.getName();
         boolean isBroadcast = !sendPrivate;
-        
+
         messageService.save(message, username, isBroadcast, receiverUsername);
         return "redirect:/messages";
     }
+
 }

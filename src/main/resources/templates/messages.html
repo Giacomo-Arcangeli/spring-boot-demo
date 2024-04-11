@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,15 +12,18 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 600px;
             margin: 50px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .message-form input[type="text"], .message-form select {
+
+        .message-form input[type="text"],
+        .message-form select {
             width: calc(100% - 20px);
             padding: 10px;
             margin-bottom: 10px;
@@ -27,6 +31,7 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+
         .message-form button[type="submit"] {
             width: 100%;
             padding: 10px;
@@ -37,20 +42,43 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .message-container {
             margin-top: 20px;
         }
+
         .message {
             background-color: #f9f9f9;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 5px;
         }
+
+        .div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logout {
+            color: red;
+            font-size: medium;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-weight: bold;
+
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h2>Messages</h2>
+        <div class="div">
+            <h2>Messages</h2>
+            <form th:action="@{/logout}" method="get">
+                <button class="logout">Logout</button>
+            </form>
+        </div>
+
         <div class="message-form">
             <form th:action="@{/messages/send}" method="post">
                 <input type="text" name="content" placeholder="Write a message" />
@@ -75,13 +103,16 @@
         </div>
         <!-- Paginazione e selezione dimensione pagina -->
         <div>
-            <a th:if="${messagePage.hasPrevious()}" th:href="@{/messages(page=${messagePage.number - 1}, size=${messagePage.size})}">Precedente</a>
-            <a th:if="${messagePage.hasNext()}" th:href="@{/messages(page=${messagePage.number + 1}, size=${messagePage.size})}">Successivo</a>
-            | Visualizza: 
+            <a th:if="${messagePage.hasPrevious()}"
+                th:href="@{/messages(page=${messagePage.number - 1}, size=${messagePage.size})}">Precedente</a>
+            <a th:if="${messagePage.hasNext()}"
+                th:href="@{/messages(page=${messagePage.number + 1}, size=${messagePage.size})}">Successivo</a>
+            | Visualizza:
             <a th:href="@{/messages(page=0, size=5)}">5</a>
             <a th:href="@{/messages(page=0, size=10)}">10</a>
             <a th:href="@{/messages(page=0, size=20)}">20</a> messaggi per pagina
         </div>
     </div>
 </body>
+
 </html>

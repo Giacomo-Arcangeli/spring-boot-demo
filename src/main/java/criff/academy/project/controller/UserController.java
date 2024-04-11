@@ -40,4 +40,14 @@ public class UserController {
     public String showLoginForm() {
         return "login";
     }
+
+    // @PostMapping("/logout")
+    // public String logout() {
+    // return "redirect:/logout";
+    // }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/login"; // Assume che il nome del template HTML sia "logout.html"
+    }
 }

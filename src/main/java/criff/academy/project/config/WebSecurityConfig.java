@@ -13,32 +13,39 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @SuppressWarnings({ "deprecation", "removal" })
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-        .authorizeRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers(new AntPathRequestMatcher("/", "GET"),
-                        new AntPathRequestMatcher("/home", "GET"),
-                        new AntPathRequestMatcher("/register", "GET"),
-                        new AntPathRequestMatcher("/register", "POST"),
-                        new AntPathRequestMatcher("/css/**", "GET"))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/messages", "GET"),
-                        new AntPathRequestMatcher("/messages/send", "POST")) // Assicurati che questo sia configurato correttamente
-                .hasAnyAuthority("ROLE_USER")
-                .anyRequest().authenticated())
-        .formLogin(formLogin -> formLogin
-                .loginPage("/login")
-                .defaultSuccessUrl("/messages", true)
-                .permitAll())
-        .logout(logout -> logout.permitAll());
+        @SuppressWarnings({ "deprecation", "removal" })
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http.csrf().disable()
+                                .authorizeRequests(authorizeRequests -> authorizeRequests
+                                                .requestMatchers(new AntPathRequestMatcher("/", "GET"),
+                                                                new AntPathRequestMatcher("/home", "GET"),
+                                                                new AntPathRequestMatcher("/register", "GET"),
+                                                                new AntPathRequestMatcher("/register", "POST"),
+                                                                new AntPathRequestMatcher("/css/**", "GET"))
+                                                .permitAll()
+                                                .requestMatchers(new AntPathRequestMatcher("/messages", "GET"),
+                                                                new AntPathRequestMatcher("/messages/send", "POST")) // Assicurati
+                                                                                                                     // che
+                                                                                                                     // questo
+                                                                                                                     // sia
+                                                                                                                     // configurato
+                                                                                                                     // correttamente
+                                                .hasAnyAuthority("ROLE_USER")
+                                                .anyRequest().authenticated())
+                                .formLogin(formLogin -> formLogin
+                                                .loginPage("/login")
+                                                .defaultSuccessUrl("/messages", true)
+                                                .permitAll())
+                                .logout(logout -> logout
+                                                .logoutSuccessUrl("/login")
+                                                .permitAll());
 
-        return http.build();
-    }
+                return http.build();
+        }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 }
